@@ -1,0 +1,111 @@
+<!-- ==========================================
+     6. instructor/templates/instructor/course_analytics.html
+     ========================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Analyse - {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>📊 Analyse du Cours</h1>
+        <h2>{{ course.title }}</h2>
+    </div>
+    
+    <p>{{ course.description }}</p>
+</div>
+
+<div class="card">
+    <h2>🏆 Top 20 Étudiants pour ce Cours</h2>
+    
+    {% if top_students %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Rang</th>
+                    <th>Étudiant</th>
+                    <th>Email</th>
+                    <th>Score</th>
+                    <th>Exercices</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in top_students %}
+                <tr>
+                    <td>
+                        <span class="rank {% if forloop.counter <= 3 %}rank-{{ forloop.counter }}{% endif %}">
+                            #{{ forloop.counter }}
+                        </span>
+                    </td>
+                    <td><strong>{{ student.get_full_name }}</strong></td>
+                    <td>{{ student.email }}</td>
+                    <td><span class="badge badge-success">{{ student.course_score|default:0 }} pts</span></td>
+                    <td>{{ student.exercises_done }}</td>
+                    <td>
+                        <a href="{% url 'instructor:student_detail' student.id %}" class="btn btn-primary">
+                            Voir détails
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="card text-center" style="background: #f8f9fa;">
+            <p>Aucun étudiant n'a encore travaillé sur ce cours.</p>
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>📝 Statistiques par Exercice</h2>
+    <p>Performance des étudiants sur chaque exercice</p>
+    
+    {% if exercises_stats %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Exercice</th>
+                    <th>Difficulté</th>
+                    <th>Tentatives</th>
+                    <th>Réussites</th>
+                    <th>Taux de réussite</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in exercises_stats %}
+                <tr>
+                    <td><strong>{{ stat.exercise.title }}</strong></td>
+                    <td>
+                        <span class="difficulty-badge difficulty-{{ stat.exercise.difficulty }}">
+                            {{ stat.exercise.get_difficulty_display }}
+                        </span>
+                    </td>
+                    <td>{{ stat.total_attempts }}</td>
+                    <td>{{ stat.successful }}</td>
+                    <td>
+                        {% if stat.success_rate >= 70 %}
+                            <span class="badge badge-success">{{ stat.success_rate }}%</span>
+                        {% elif stat.success_rate >= 40 %}
+                            <span class="badge badge-warning">{{ stat.success_rate }}%</span>
+                        {% else %}
+                            <span class="badge badge-danger">{{ stat.success_rate }}%</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="card text-center" style="background: #f8f9fa;">
+            <p>Aucune statistique disponible pour ce cours.</p>
+        </div>
+    {% endif %}
+</div>
+
+<div class="text-center mt-3">
+    <a href="{% url 'instructor:dashboard' %}" class="btn btn-primary">← Retour au tableau de bord</a>
+    <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-secondary">Voir le cours</a>
+</div>
+{% endblock %}

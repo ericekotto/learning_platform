@@ -1,0 +1,185 @@
+<!-- ==========================================
+     7. instructor/templates/instructor/student_detail.html
+     ========================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Détails - {{ student.get_full_name }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>👨‍🎓 Profil Étudiant</h1>
+        <h2>{{ student.get_full_name }}</h2>
+    </div>
+    
+    <div class="grid-2">
+        <div>
+            <p><strong>Nom d'utilisateur :</strong> {{ student.username }}</p>
+            <p><strong>Email :</strong> {{ student.email }}</p>
+            <p><strong>Téléphone :</strong> {{ student.phone|default:"Non renseigné" }}</p>
+            <p><strong>Inscrit depuis :</strong> {{ student.created_at|date:"d/m/Y" }}</p>
+        </div>
+        <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="stat-card">
+                <span class="stat-value">{{ total_score }}</span>
+                <span class="stat-label">Points totaux</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{{ attempts.count }}</span>
+                <span class="stat-label">Tentatives</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>📚 Progression par Cours</h2>
+    
+    {% for data in courses_progress %}
+    <div class="card" style="margin-bottom: 1rem;">
+        <div class="card-header">
+            <h3>
+                {% if data.course.course_type == 'variables' %}📦
+                {% elif data.course.course_type == 'conditionals' %}🔀
+                {% elif data.course.course_type == 'loops' %}🔄
+                {% elif data.course.course_type == 'functions' %}⚙️
+                {% endif %}
+                {{ data.course.title }}
+            </h3>
+        </div>
+        
+        <div class="card-body">
+            <div style="margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>{{ data.exercises_done }}/{{ data.total_exercises }} exercices</span>
+                    <span><strong>{{ data.completion }}%</strong></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ data.completion }}%;">
+                        {{ data.completion }}%
+                    </div>
+                </div>
+            </div>
+            <p><strong>Score :</strong> {{ data.total_score }} points</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="card">
+    <h2>🕐 Historique Récent (30 dernières tentatives)</h2>
+    
+    {% if attempts %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Cours</th>
+                    <th>Exercice</th>
+                    <th>Score</th>
+                    <th>Résultat</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attempt in attempts %}
+                <tr>
+                    <td>{{ attempt.attempt_date|date:"d/m/Y H:i" }}</td>
+                    <td>{{ attempt.course.title }}</td>
+                    <td>{{ attempt.exercise.title }}</td>
+                    <td>{{ attempt.score }}/{{ attempt.max_score }}</td>
+                    <td>
+                        {% if attempt.is_correct %}
+                            <span class="badge badge-success">✅ Réussi</span>
+                        {% else %}
+                            <span class="badge badge-danger">❌ Raté</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="card text-center" style="background: #f8f9fa;">
+            <p>Aucune tentative pour le moment.</p>
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>❌ Exercices Ratés</h2>
+    <p>Exercices où l'étudiant a besoin d'aide</p>
+    
+    {% if failed_attempts %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Cours</th>
+                    <th>Exercice</th>
+                    <th>Réponse donnée</th>
+                    <th>Bonne réponse</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attempt in failed_attempts %}
+                <tr>
+                    <td>{{ attempt.attempt_date|date:"d/m/Y" }}</td>
+                    <td>{{ attempt.course.title }}</td>
+                    <td>{{ attempt.exercise.title }}</td>
+                    <td><span class="badge badge-danger">{{ attempt.answer_given }}</span></td>
+                    <td><span class="badge badge-success">{{ attempt.exercise.correct_answer }}</span></td>
+                    <td>
+                        <a href="{% url 'instructor:add_feedback' student.id attempt.exercise.id %}" class="btn btn-warning">
+                            Ajouter un commentaire
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="card" style="background: #d4edda	; text-align: center;">
+            <p style="color: #155724;">🎉 Aucun exercice raté ! Excellent travail !</p>
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>💬 Commentaires Envoyés</h2>
+    
+    {% if existing_feedbacks %}
+        {% for feedback in existing_feedbacks %}
+        <div class="feedback-card feedback-type-{{ feedback.feedback_type }}">
+            <div class="feedback-header">
+                <div>
+                    <span>
+                        {% if feedback.feedback_type == 'encouragement' %}💪
+                        {% elif feedback.feedback_type == 'congratulation' %}🎉
+                        {% elif feedback.feedback_type == 'correction' %}📝
+                        {% endif %}
+                        {{ feedback.get_feedback_type_display }}
+                    </span>
+                </div>
+                <span class="feedback-date">{{ feedback.created_at|date:"d/m/Y à H:i" }}</span>
+            </div>
+            <div style="margin-top: 0.5rem;">
+                <strong>Exercice :</strong> {{ feedback.exercise.title }}
+            </div>
+            <div class="feedback-text" style="margin-top: 0.75rem;">
+                {{ feedback.feedback_text }}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="card text-center" style="background: #f8f9fa;">
+            <p>Aucun commentaire envoyé pour le moment.</p>
+        </div>
+    {% endif %}
+</div>
+
+<div class="text-center mt-3">
+    <a href="{% url 'instructor:students_list' %}" class="btn btn-primary">← Liste des étudiants</a>
+    <a href="{% url 'instructor:dashboard' %}" class="btn btn-secondary">Tableau de bord</a>
+</div>
+{% endblock %}

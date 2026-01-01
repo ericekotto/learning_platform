@@ -1,0 +1,87 @@
+<!-- ==========================================
+     2. accounts/templates/accounts/profile.html
+     ========================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 2rem auto;">
+    <div class="card-header">
+        <h1>👤 Mon Profil</h1>
+    </div>
+    
+    <div class="card-body">
+        <div class="grid-2">
+            <div>
+                <h3>Informations personnelles</h3>
+                <p><strong>Nom d'utilisateur :</strong> {{ user.username }}</p>
+                <p><strong>Nom complet :</strong> {{ user.get_full_name }}</p>
+                <p><strong>Email :</strong> {{ user.email }}</p>
+                <p><strong>Téléphone :</strong> {{ user.phone|default:"Non renseigné" }}</p>
+                <p><strong>Type de compte :</strong> 
+                    {% if user.is_instructor %}
+                        <span class="badge badge-warning">👨‍🏫 Encadreur</span>
+                    {% else %}
+                        <span class="badge badge-info">👨‍🎓 Étudiant</span>
+                    {% endif %}
+                </p>
+                <p><strong>Inscrit depuis :</strong> {{ user.created_at|date:"d/m/Y" }}</p>
+            </div>
+            
+            <div>
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="Avatar" style="max-width: 200px; border-radius: 50%;">
+                {% else %}
+                    <div style="width: 200px; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
+                        {{ user.first_name.0|upper }}{{ user.last_name.0|upper }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if profile %}
+        <div style="margin-top: 2rem;">
+            <h3>Profil étendu</h3>
+            <p><strong>École/Université :</strong> {{ profile.school|default:"Non renseigné" }}</p>
+            <p><strong>Niveau :</strong> {{ profile.level|default:"Non renseigné" }}</p>
+            {% if profile.bio %}
+                <p><strong>Biographie :</strong></p>
+                <div class="card" style="background: #f8f9fa;">
+                    {{ profile.bio }}
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        {% if user.is_student %}
+        <div style="margin-top: 2rem;">
+            <h3>📊 Mes statistiques</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value">{{ user.get_total_score }}</span>
+                    <span class="stat-label">Points totaux</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">{{ user.get_completion_percentage }}%</span>
+                    <span class="stat-label">Progression</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">{{ user.scores.count }}</span>
+                    <span class="stat-label">Exercices réalisés</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="text-center mt-3">
+        {% if user.is_instructor %}
+            <a href="{% url 'instructor:dashboard' %}" class="btn btn-primary">← Retour au tableau de bord</a>
+        {% else %}
+            <a href="{% url 'courses:home' %}" class="btn btn-primary">← Retour aux cours</a>
+            <a href="{% url 'courses:my_progress' %}" class="btn btn-secondary">Voir ma progression</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

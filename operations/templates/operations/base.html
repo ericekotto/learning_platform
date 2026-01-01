@@ -1,0 +1,57 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Apprentissage des Variables{% endblock %}</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🎓 Apprends en profondeur et test tes connaissances </h1>
+            <nav class="nav">
+                <a href="{% url 'operations:home' %}" class="nav-link">Accueil</a>
+                <a href="{% url 'operations:types_info' %}" class="nav-link">Types de données</a>
+                
+                <a href="{% url 'courses:home' %}" class="nav-link return-link" style="margin-left: 20px; font-weight: bold; color: #ffc107;">
+                    ← Retour à la Plateforme
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <nav class="operations-menu">
+        <div class="container">
+            <a href="{% url 'operations:addition' %}" class="op-link">➕ Addition</a>
+            <a href="{% url 'operations:soustraction' %}" class="op-link">➖ Soustraction</a>
+            <a href="{% url 'operations:multiplication' %}" class="op-link">✖️ Multiplication</a>
+            <a href="{% url 'operations:division' %}" class="op-link">➗ Division</a>
+            <a href="{% url 'operations:modulo' %}" class="op-link">📐 Modulo</a>
+            <a href="{% url 'operations:concatenation' %}" class="op-link">🔗 Concaténation</a>
+            <a href="{% url 'operations:comparaison' %}" class="op-link">⚖️ Comparaison</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 - Par un groupe d'élèves professeurs de L'ENS</p>
+            <p>Créé avec Django pour aider les Notions de variables et les opérations de base possibles</p>
+        </div>
+    </footer>
+</body>
+</html>

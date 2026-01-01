@@ -1,0 +1,49 @@
+
+<!-- ========================================
+     courses/templates/courses/home.html
+     ======================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Accueil - Cours{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <h1>🎓 Bienvenue {{ user.get_full_name }} !</h1>
+    <p>Choisissez un cours pour commencer votre apprentissage</p>
+</div>
+
+{% if user_stats %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-value">{{ user_stats.total_score }}</span>
+        <span class="stat-label">Points totaux</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ user_stats.completion }}%</span>
+        <span class="stat-label">Progression</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ user_stats.exercises_done }}</span>
+        <span class="stat-label">Exercices réalisés</span>
+    </div>
+</div>
+{% endif %}
+
+<div class="grid-2">
+    {% for course in courses %}
+    <div class="course-card">
+        <div class="course-icon">
+            {% if course.course_type == 'variables' %}📦
+            {% elif course.course_type == 'conditionals' %}🔀
+            {% elif course.course_type == 'loops' %}🔄
+            {% elif course.course_type == 'functions' %}⚙️
+            {% endif %}
+        </div>
+        <h3 class="course-title">{{ course.title }}</h3>
+        <p>{{ course.description }}</p>
+        <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-primary">Commencer →</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

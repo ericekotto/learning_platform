@@ -1,0 +1,98 @@
+<!-- ========================================
+     instructor/templates/instructor/dashboard.html
+     ======================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Tableau de bord Encadreur{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <h1>📊 Tableau de bord Encadreur</h1>
+    <p>Bienvenue {{ user.get_full_name }} !</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-value">{{ total_students }}</span>
+        <span class="stat-label">Étudiants inscrits</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ total_exercises }}</span>
+        <span class="stat-label">Exercices disponibles</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ total_attempts }}</span>
+        <span class="stat-label">Tentatives totales</span>
+    </div>
+</div>
+
+<div class="card">
+    <h2>📚 Progression par cours</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Cours</th>
+                <th>Étudiants actifs</th>
+                <th>Score moyen</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td><strong>{{ course.title }}</strong></td>
+                <td>{{ course.student_count }}</td>
+                <td>{{ course.avg_score|default:"N/A" }}</td>
+                <td>
+                    <a href="{% url 'instructor:course_analytics' course.id %}" class="btn btn-primary">Voir détails</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>🏆 Top 10 Étudiants</h2>
+    {% for student in top_students %}
+    <div class="leaderboard-item">
+        <span class="rank rank-{{ forloop.counter }}">{{ forloop.counter }}</span>
+        <div class="student-info">
+            <div class="student-name">{{ student.get_full_name }}</div>
+            <div class="student-score">{{ student.total_score }} points - {{ student.exercises_count }} exercices</div>
+        </div>
+        <a href="{% url 'instructor:student_detail' student.id %}" class="btn btn-primary">Voir profil</a>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="card">
+    <h2>🕐 Activité récente</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Étudiant</th>
+                <th>Exercice</th>
+                <th>Score</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for score in recent_scores %}
+            <tr>
+                <td>{{ score.student.get_full_name }}</td>
+                <td>{{ score.exercise.title }}</td>
+                <td>
+                    {% if score.is_correct %}
+                        <span class="badge badge-success">{{ score.score }}/{{ score.max_score }}</span>
+                    {% else %}
+                        <span class="badge badge-danger">{{ score.score }}/{{ score.max_score }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ score.attempt_date|date:"d/m/Y H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

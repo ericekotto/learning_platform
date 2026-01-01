@@ -1,0 +1,94 @@
+
+{% extends 'operations/base.html' %}
+
+{% load static %}
+
+{% block title %}Accueil - Apprentissage des Variables{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1 class="hero-title">Bienvenue chers collègues de L'ENS de YAOUNDE ! 🚀</h1>
+    <p class="hero-subtitle">
+        Découvrez la notion de variable et leur mode de fonctionnement en informatique
+    </p>
+</div>
+
+<div class="intro-section">
+    <h2>Qu'est-ce qu'une variable ?</h2>
+    <p>
+        En programmation, une <strong>variable</strong> est comme une boîte dans laquelle on peut stocker des informations.
+        Chaque variable a un <strong>type</strong> qui détermine quel genre d'information elle peut contenir et quelles
+        opérations on peut effectuer avec.
+    </p>
+</div>
+
+<div class="cards-grid">
+    <div class="card">
+        <div class="card-icon">📚</div>
+        <h3>Apprenez les types</h3>
+        <p>Découvrez les différents types de données : entiers, flottants, chaînes, booléens...</p>
+        <a href="{% url 'operations:types_info' %}" class="btn btn-primary">Voir les types</a>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">🧮</div>
+        <h3>Testez les opérations</h3>
+        <p>Essayez toutes les opérations possibles entre différents types de données.</p>
+        <a href="{% url 'operations:addition' %}" class="btn btn-primary">Commencer</a>
+    </div>
+
+    <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Visualisez les résultats</h3>
+        <p>Voyez graphiquement ce qui se passe lors des opérations.</p>
+        <a href="{% url 'operations:multiplication' %}" class="btn btn-primary">Essayer</a>
+    </div>
+</div>
+
+<div class="features-section">
+    <h2>Fonctionnalités de l'application</h2>
+    
+    <div class="feature">
+        <h3>✅ Détection automatique des types</h3>
+        <p>
+            Entrez vos valeurs et l'application détecte automatiquement s'il s'agit d'un entier,
+            d'un nombre décimal, d'une chaîne de caractères ou d'un booléen.
+        </p>
+    </div>
+
+    <div class="feature">
+        <h3>🚫 Gestion des erreurs</h3>
+        <p>
+            Quand une opération est impossible (par exemple additionner un nombre et du texte),
+            l'application vous explique pourquoi et vous guide.
+        </p>
+    </div>
+
+    <div class="feature">
+        <h3>📈 Visualisations graphiques</h3>
+        <p>
+            Pour les opérations numériques, visualisez les valeurs et les résultats sous forme de graphiques.
+        </p>
+    </div>
+
+    <div class="feature">
+        <h3>💡 Explications pédagogiques</h3>
+        <p>
+            Chaque résultat est accompagné d'explications claires pour comprendre ce qui s'est passé.
+        </p>
+    </div>
+</div>
+
+<div class="cta-section">
+    <h2>Prêt à commencer ?</h2>
+    <p>Choisissez une opération dans le menu ci-dessus ou consultez d'abord les types de données !</p>
+    <div class="cta-buttons">
+        <a href="{% url 'operations:types_info' %}" class="btn btn-large btn-secondary">
+            📖 Guide des types
+        </a>
+        <a href="{% url 'operations:addition' %}" class="btn btn-large btn-primary">
+            🎯 Commencer maintenant
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+<!-- ========================================
+     courses/templates/courses/exercise.html
+     ======================================== -->
+{% extends 'base.html' %}
+
+{% block title %}{{ exercise.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>{{ exercise.title }}</h1>
+        <div>
+            <span class="difficulty-badge difficulty-{{ exercise.difficulty }}">
+                {{ exercise.get_difficulty_display }}
+            </span>
+            <span class="badge badge-info">{{ exercise.points }} points</span>
+        </div>
+    </div>
+    
+    {% if previous_attempt %}
+    <div class="card" style="background: #d1ecf1;">
+        <h3>ℹ️ Vous avez déjà répondu à cet exercice</h3>
+        <p><strong>Score obtenu :</strong> {{ previous_attempt.score }}/{{ previous_attempt.max_score }}</p>
+        <p><strong>Réponse :</strong> {{ previous_attempt.get_is_correct_display }}</p>
+        <a href="{% url 'courses:exercise_result' exercise.id %}" class="btn btn-primary">Voir le résultat</a>
+    </div>
+    {% endif %}
+    
+    <div class="card-body">
+        <h2>Question :</h2>
+        <p style="font-size: 1.1rem; font-weight: 500;">{{ exercise.question }}</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="radio" name="answer" value="A" required>
+                    <strong>A)</strong> {{ exercise.option_a }}
+                </label>
+                
+                <label class="option-label">
+                    <input type="radio" name="answer" value="B" required>
+                    <strong>B)</strong> {{ exercise.option_b }}
+                </label>
+                
+                {% if exercise.option_c %}
+                <label class="option-label">
+                    <input type="radio" name="answer" value="C">
+                    <strong>C)</strong> {{ exercise.option_c }}
+                </label>
+                {% endif %}
+                
+                {% if exercise.option_d %}
+                <label class="option-label">
+                    <input type="radio" name="answer" value="D">
+                    <strong>D)</strong> {{ exercise.option_d }}
+                </label>
+                {% endif %}
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block btn-large">Valider ma réponse</button>
+        </form>
+    </div>
+</div>
+
+{% if feedbacks %}
+<div class="card">
+    <h2>💬 Commentaires des encadreurs</h2>
+    {% for feedback in feedbacks %}
+    <div class="feedback-card feedback-type-{{ feedback.feedback_type }}">
+        <div class="feedback-header">
+            <span class="feedback-instructor">{{ feedback.instructor.get_full_name }}</span>
+            <span class="feedback-date">{{ feedback.created_at|date:"d/m/Y à H:i" }}</span>
+        </div>
+        <div class="feedback-text">{{ feedback.feedback_text }}</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="text-center mt-3">
+    <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-secondary">← Retour au cours</a>
+</div>
+{% endblock %}
+
+

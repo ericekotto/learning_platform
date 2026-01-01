@@ -1,0 +1,106 @@
+<!-- ==========================================
+     10. instructor/templates/instructor/add_feedback.html
+     ========================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Ajouter un Commentaire{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 2rem auto;">
+    <div class="card-header">
+        <h1>💬 Ajouter un Commentaire</h1>
+        <h2>Pour {{ student.get_full_name }}</h2>
+    </div>
+    
+    <div class="card" style="background: #f8f9fa;">
+        <p><strong>Exercice concerné :</strong> {{ exercise.title }}</p>
+        <p><strong>Cours :</strong> {{ exercise.course.title }}</p>
+        <p><strong>Question :</strong> {{ exercise.question }}</p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="feedback_type">Type de commentaire</label>
+            <select name="feedback_type" id="feedback_type" class="form-select" required>
+                <option value="correction">📝 Correction - Expliquer l'erreur</option>
+                <option value="encouragement">💪 Encouragement - Motiver l'étudiant</option>
+                <option value="congratulation">🎉 Félicitation - Célébrer la réussite</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="feedback_text">Votre commentaire</label>
+            <textarea 
+                name="feedback_text" 
+                id="feedback_text" 
+                class="form-textarea" 
+                rows="8" 
+                required
+                placeholder="Écrivez un commentaire personnalisé pour aider l'étudiant à progresser...
+
+Exemples :
+- Expliquez pourquoi la réponse est incorrecte
+- Donnez des conseils pour mieux comprendre
+- Encouragez l'étudiant à persévérer
+- Félicitez pour les efforts fournis"
+            ></textarea>
+        </div>
+        
+        <div class="card" style="background: #fff3cd; margin-bottom: 1.5rem;">
+            <h4>💡 Conseils pour un bon feedback</h4>
+            <ul style="margin: 0.5rem 0 0 1.5rem;">
+                <li>Soyez spécifique et clair</li>
+                <li>Expliquez le "pourquoi" pas seulement le "quoi"</li>
+                <li>Restez positif et encourageant</li>
+                <li>Proposez des pistes d'amélioration concrètes</li>
+                <li>Personnalisez votre message</li>
+            </ul>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-block btn-large">
+            ✉️ Envoyer le commentaire
+        </button>
+    </form>
+    
+    <div class="text-center mt-3">
+        <a href="{% url 'instructor:student_detail' student.id %}" class="btn btn-secondary">
+            ← Retour au profil de l'étudiant
+        </a>
+    </div>
+</div>
+
+<div class="card" style="max-width: 800px; margin: 2rem auto; background: #d1ecf1;">
+    <h3>📋 Exemples de commentaires</h3>
+    
+    <div style="margin-top: 1rem;">
+        <h4>Pour une correction :</h4>
+        <p style="font-style: italic; color: #555;">
+            "Bonjour {{ student.first_name }}, tu as choisi l'option A mais la bonne réponse était B. 
+            L'opérateur == teste l'égalité, tandis que = sert à affecter une valeur. 
+            C'est une confusion courante ! Pense à bien distinguer ces deux opérateurs. 
+            N'hésite pas à refaire l'exercice. Tu es sur la bonne voie ! 💪"
+        </p>
+    </div>
+    
+    <div style="margin-top: 1rem;">
+        <h4>Pour un encouragement :</h4>
+        <p style="font-style: italic; color: #555;">
+            "Continue comme ça {{ student.first_name }} ! Tu progresses bien. 
+            Les boucles peuvent sembler difficiles au début, mais avec de la pratique, 
+            elles deviendront naturelles. Persévère et tu verras les résultats ! 🚀"
+        </p>
+    </div>
+    
+    <div style="margin-top: 1rem;">
+        <h4>Pour une félicitation :</h4>
+        <p style="font-style: italic; color: #555;">
+            "Excellent travail {{ student.first_name }} ! 🎉 
+            Tu as parfaitement compris le concept des fonctions. 
+            Ta réponse montre une bonne maîtrise du sujet. 
+            Continue sur cette lancée, tu es sur la voie du succès ! ⭐"
+        </p>
+    </div>
+</div>
+{% endblock %}

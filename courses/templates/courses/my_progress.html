@@ -1,0 +1,120 @@
+
+<!-- ==========================================
+     5. courses/templates/courses/my_progress.html
+     ========================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Ma Progression{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <h1>📈 Ma Progression</h1>
+    <p>Suivez votre apprentissage et vos performances</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-value">{{ total_score }}</span>
+        <span class="stat-label">Points totaux</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ user.get_completion_percentage }}%</span>
+        <span class="stat-label">Progression globale</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value">{{ user.scores.count }}</span>
+        <span class="stat-label">Exercices réalisés</span>
+    </div>
+</div>
+
+<div class="card">
+    <h2>📚 Progression par Cours</h2>
+    
+    {% for data in progress_data %}
+    <div class="card" style="margin-bottom: 1.5rem;">
+        <div class="card-header">
+            <h3>
+                {% if data.course.course_type == 'variables' %}📦
+                {% elif data.course.course_type == 'conditionals' %}🔀
+                {% elif data.course.course_type == 'loops' %}🔄
+                {% elif data.course.course_type == 'functions' %}⚙️
+                {% endif %}
+                {{ data.course.title }}
+            </h3>
+        </div>
+        
+        <div class="card-body">
+            <div style="margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <span>Exercices complétés : {{ data.exercises_done }}/{{ data.total_exercises }}</span>
+                    <span><strong>{{ data.completion }}%</strong></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ data.completion }}%;">
+                        {{ data.completion }}%
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-2">
+                <div>
+                    <p><strong>Score obtenu :</strong> {{ data.total_score }} points</p>
+                </div>
+                <div style="text-align: right;">
+                    <a href="{% url 'courses:course_detail' data.course.id %}" class="btn btn-primary">
+                        Continuer le cours →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if feedbacks %}
+<div class="card">
+    <h2>💬 Commentaires des Encadreurs</h2>
+    <p>Les encadreurs ont laissé ces commentaires pour vous aider</p>
+    
+    {% for feedback in feedbacks %}
+    <div class="feedback-card feedback-type-{{ feedback.feedback_type }}">
+        <div class="feedback-header">
+            <div>
+                <span class="feedback-instructor">
+                    👨‍🏫 {{ feedback.instructor.get_full_name }}
+                </span>
+                <span style="margin-left: 1rem;">
+                    {% if feedback.feedback_type == 'encouragement' %}💪
+                    {% elif feedback.feedback_type == 'congratulation' %}🎉
+                    {% elif feedback.feedback_type == 'correction' %}📝
+                    {% endif %}
+                    {{ feedback.get_feedback_type_display }}
+                </span>
+            </div>
+            <span class="feedback-date">{{ feedback.created_at|date:"d/m/Y à H:i" }}</span>
+        </div>
+        <div style="margin-top: 0.5rem;">
+            <strong>Exercice :</strong> {{ feedback.exercise.title }}
+        </div>
+        <div class="feedback-text" style="margin-top: 0.75rem;">
+            {{ feedback.feedback_text }}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="card text-center" style="background: #f8f9fa;">
+    <p>Aucun commentaire d'encadreur pour le moment.</p>
+    <p>Continuez à faire des exercices !</p>
+</div>
+{% endif %}
+
+<div class="card text-center">
+    <h3>🎯 Continuez votre apprentissage !</h3>
+    <p>Plus vous pratiquez, plus vous progressez</p>
+    <div style="margin-top: 1.5rem;">
+        <a href="{% url 'courses:home' %}" class="btn btn-primary btn-large">Voir tous les cours</a>
+        <a href="{% url 'courses:leaderboard' %}" class="btn btn-secondary btn-large">Voir le classement</a>
+    </div>
+</div>
+{% endblock %}

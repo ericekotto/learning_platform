@@ -1,0 +1,40 @@
+
+<!-- ========================================
+     accounts/templates/accounts/register_student.html
+     ======================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Inscription Étudiant{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 2rem auto;">
+    <div class="card-header text-center">
+        <h2>📚 Inscription Étudiant</h2>
+        <p>Créez votre compte pour commencer à apprendre</p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="error-message">{{ field.errors }}</div>
+                {% endif %}
+                {% if field.help_text %}
+                    <small style="color: #666;">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+        {% endfor %}
+        
+        <button type="submit" class="btn btn-primary btn-block">S'inscrire</button>
+    </form>
+    
+    <div style="margin-top: 1.5rem; text-align: center;">
+        <p>Déjà un compte ? <a href="{% url 'accounts:login' %}">Se connecter</a></p>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environnement Anaconda
+.conda/
+env/
+venv/
+
+# Base de données (TRÈS IMPORTANT)
+db.sqlite3
+
+# Fichiers médias (images téléchargées par les utilisateurs)
+media/
+
+# Secrets
+.env
+local_settings.py
+
+# OS
+.DS_Store
+Thumbs.db

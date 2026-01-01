@@ -1,0 +1,895 @@
+/* =================================================================
+   STYLES GLOBAUX - Règles appliquées à toute l'application
+   ================================================================= */
+
+/* Réinitialisation des marges par défaut du navigateur */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Style général du body (corps de la page) */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+/* Conteneur principal pour centrer le contenu */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* =================================================================
+   HEADER (En-tête) - Navigation principale
+   ================================================================= */
+
+.header {
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.nav {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #667eea;
+}
+
+/* =================================================================
+   MENU DES OPÉRATIONS
+   ================================================================= */
+
+.operations-menu {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1rem 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.operations-menu .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.op-link {
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.op-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* =================================================================
+   CONTENU PRINCIPAL
+   ================================================================= */
+
+.main-content {
+    padding: 2rem 0;
+    min-height: calc(100vh - 300px);
+}
+
+/* =================================================================
+   PAGE D'ACCUEIL - Hero section
+   ================================================================= */
+
+.hero {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* Section d'introduction */
+.intro-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.intro-section h2 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+/* Grille de cartes */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.card h3 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+/* Section des fonctionnalités */
+.features-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.features-section h2 {
+    color: #667eea;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.feature {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+}
+
+.feature h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+/* =================================================================
+   BOUTONS
+   ================================================================= */
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Section CTA (Call To Action) */
+.cta-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.cta-section h2 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+/* =================================================================
+   PAGE TYPES DE DONNÉES
+   ================================================================= */
+
+.types-header {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.types-header h1 {
+    color: #667eea;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.types-intro {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.types-intro h2 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.types-intro ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.types-intro li {
+    padding: 0.5rem 0;
+    font-size: 1.05rem;
+}
+
+/* Carte de type */
+.type-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.type-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+}
+
+.type-header h2 {
+    margin: 0;
+}
+
+.type-body {
+    padding: 2rem;
+}
+
+.type-description,
+.type-examples,
+.type-operations {
+    margin-bottom: 2rem;
+}
+
+.type-description h3,
+.type-examples h3,
+.type-operations h3 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+/* Grille d'exemples */
+.examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.example-code {
+    display: block;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+    font-family: 'Courier New', monospace;
+    color: #333;
+}
+
+/* Opérations possibles/impossibles */
+.type-operations {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.operations-possible ul,
+.operations-impossible ul {
+    list-style: none;
+    padding: 0;
+}
+
+.operations-possible li,
+.operations-impossible li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.operations-possible li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #28a745;
+    font-weight: bold;
+}
+
+.operations-impossible li::before {
+    content: "✗";
+    position: absolute;
+    left: 0;
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Tableau récapitulatif */
+.types-summary {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.types-summary h2 {
+    color: #667eea;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.summary-table th,
+.summary-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.summary-table th {
+    background: #f8f9fa;
+    color: #667eea;
+    font-weight: 600;
+}
+
+.summary-table .check {
+    color: #28a745;
+}
+
+.summary-table .cross {
+    color: #dc3545;
+}
+
+/* Astuces */
+.tips-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.tips-section h2 {
+    color: #667eea;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.tip-box {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    border-left: 4px solid #667eea;
+}
+
+.tip-box h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.tip-box code {
+    background: #e9ecef;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+}
+
+/* =================================================================
+   PAGE OPÉRATION
+   ================================================================= */
+
+.operation-page {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.operation-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.operation-header h1 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.operation-description {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Formulaire */
+.form-container {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.form-container h2 {
+    color: #667eea;
+    margin-bottom: 0.5rem;
+}
+
+.form-help {
+    color: #666;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+.operation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.form-input {
+    padding: 0.75rem;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+/* Section résultats */
+.results-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #f0f0f0;
+}
+
+.results-section h2 {
+    color: #667eea;
+    margin-bottom: 1.5rem;
+}
+
+/* Types détectés */
+.types-detected {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.types-detected h3 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.type-boxes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.type-box {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    text-align: center;
+    min-width: 200px;
+}
+
+.type-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.type-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-bottom: 0.5rem;
+}
+
+.type-name {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.operation-symbol {
+    font-size: 2rem;
+}
+
+/* Résultat réussi */
+.result-success {
+    background: #d4edda;
+    border: 2px solid #28a745;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.result-success h3 {
+    color: #155724;
+    margin-bottom: 1rem;
+}
+
+.result-value {
+    font-size: 1.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.result-explanation {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+}
+
+/* Résultats de comparaison */
+.comparison-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.comparison-item {
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.comparison-item.true {
+    border: 2px solid #28a745;
+}
+
+.comparison-item.false {
+    border: 2px solid #dc3545;
+}
+
+.comp-expression {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+}
+
+.comp-result {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.comparison-item.true .comp-result {
+    color: #28a745;
+}
+
+.comparison-item.false .comp-result {
+    color: #dc3545;
+}
+
+/* Graphique */
+.chart-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+}
+
+.chart-container h3 {
+    color: #667eea;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+#resultChart {
+    max-height: 400px;
+}
+
+/* Résultat erreur */
+.result-error {
+    background: #f8d7da;
+    border: 2px solid #dc3545;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.result-error h3 {
+    color: #721c24;
+    margin-bottom: 1rem;
+}
+
+.error-details {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.error-details p {
+    margin-bottom: 0.5rem;
+}
+
+.error-help {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.error-help h4 {
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.error-help ul {
+    padding-left: 1.5rem;
+}
+
+.error-help li {
+    margin-bottom: 0.5rem;
+}
+
+.error-help a {
+    color: #667eea;
+    text-decoration: underline;
+}
+
+/* Exemples d'utilisation */
+.examples-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #f0f0f0;
+}
+
+.examples-section h2 {
+    color: #667eea;
+    margin-bottom: 1.5rem;
+}
+
+.examples-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.example-card {
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.example-card.success {
+    background: #d4edda;
+    border: 2px solid #28a745;
+}
+
+.example-card.error {
+    background: #f8d7da;
+    border: 2px solid #dc3545;
+}
+
+.example-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.example-card.success .example-title {
+    color: #155724;
+}
+
+.example-card.error .example-title {
+    color: #721c24;
+}
+
+.example-card code {
+    display: block;
+    background: white;
+    padding: 0.75rem;
+    border-radius: 6px;
+    margin: 0.5rem 0;
+    font-family: 'Courier New', monospace;
+}
+
+.example-card p {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+/* =================================================================
+   FOOTER (Pied de page)
+   ================================================================= */
+
+.footer {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: 3rem;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.footer p {
+    margin: 0.5rem 0;
+    color: #666;
+}
+
+/* =================================================================
+   RESPONSIVE - Adaptations pour mobiles et tablettes
+   ================================================================= */
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .type-operations {
+        grid-template-columns: 1fr;
+    }
+    
+    .type-boxes {
+        flex-direction: column;
+    }
+    
+    .nav {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .operations-menu .container {
+        flex-direction: column;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+    }
+    
+    .btn-large {
+        width: 100%;
+    }
+    
+    .examples-grid {
+        grid-template-columns: 1fr;
+    }
+}  

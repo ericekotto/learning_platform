@@ -1,0 +1,89 @@
+<!-- ==========================================
+     3. courses/templates/courses/exercise_result.html
+     ========================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Résultat - {{ exercise.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>📊 Résultat de l'exercice</h1>
+        <h2>{{ exercise.title }}</h2>
+    </div>
+    
+    {% if attempt.is_correct %}
+    <div class="card" style="background: #d4edda; border: 2px solid #28a745;">
+        <div style="text-align: center;">
+            <div style="font-size: 5rem;">✅</div>
+            <h2 style="color: #155724;">Bravo ! Réponse correcte !</h2>
+            <p style="font-size: 1.3rem; font-weight: 600; color: #155724;">
+                Vous avez gagné {{ attempt.score }} points sur {{ attempt.max_score }} !
+            </p>
+        </div>
+    </div>
+    {% else %}
+    <div class="card" style="background: #f8d7da; border: 2px solid #dc3545;">
+        <div style="text-align: center;">
+            <div style="font-size: 5rem;">❌</div>
+            <h2 style="color: #721c24;">Réponse incorrecte</h2>
+            <p style="font-size: 1.2rem; color: #721c24;">
+                Score obtenu : {{ attempt.score }}/{{ attempt.max_score }}
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="card">
+        <h3>📝 Récapitulatif</h3>
+        <p><strong>Question :</strong> {{ exercise.question }}</p>
+        <p><strong>Votre réponse :</strong> 
+            <span class="badge {% if attempt.is_correct %}badge-success{% else %}badge-danger{% endif %}">
+                Option {{ attempt.answer_given }}
+            </span>
+        </p>
+        <p><strong>Bonne réponse :</strong> 
+            <span class="badge badge-success">Option {{ exercise.correct_answer }}</span>
+        </p>
+    </div>
+    
+    <div class="card" style="background: #fff3cd;">
+        <h3>💡 Explication</h3>
+        <p style="font-size: 1.1rem;">{{ exercise.explanation }}</p>
+    </div>
+    
+    <div class="card">
+        <h3>📌 Options de l'exercice</h3>
+        <div class="options-grid">
+            <div class="option-label {% if exercise.correct_answer == 'A' %}badge-success{% elif attempt.answer_given == 'A' %}badge-danger{% endif %}" style="border: 2px solid;">
+                <strong>A)</strong> {{ exercise.option_a }}
+                {% if exercise.correct_answer == 'A' %} ✅{% endif %}
+            </div>
+            <div class="option-label {% if exercise.correct_answer == 'B' %}badge-success{% elif attempt.answer_given == 'B' %}badge-danger{% endif %}" style="border: 2px solid;">
+                <strong>B)</strong> {{ exercise.option_b }}
+                {% if exercise.correct_answer == 'B' %} ✅{% endif %}
+            </div>
+            {% if exercise.option_c %}
+            <div class="option-label {% if exercise.correct_answer == 'C' %}badge-success{% elif attempt.answer_given == 'C' %}badge-danger{% endif %}" style="border: 2px solid;">
+                <strong>C)</strong> {{ exercise.option_c }}
+                {% if exercise.correct_answer == 'C' %} ✅{% endif %}
+            </div>
+            {% endif %}
+            {% if exercise.option_d %}
+            <div class="option-label {% if exercise.correct_answer == 'D' %}badge-success{% elif attempt.answer_given == 'D' %}badge-danger{% endif %}" style="border: 2px solid;">
+                <strong>D)</strong> {{ exercise.option_d }}
+                {% if exercise.correct_answer == 'D' %} ✅{% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="text-center mt-3">
+        <a href="{% url 'courses:course_detail' exercise.course.id %}" class="btn btn-primary">← Retour au cours</a>
+        <a href="{% url 'courses:home' %}" class="btn btn-secondary">Accueil des cours</a>
+        {% if not attempt.is_correct %}
+            <a href="{% url 'courses:exercise' exercise.id %}" class="btn btn-warning">Réessayer</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

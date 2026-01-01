@@ -1,0 +1,169 @@
+
+{% extends 'operations/base.html' %}
+{% load static %}
+
+{% block title %}Types de données - Apprentissage{% endblock %}
+
+{% block content %}
+<div class="types-header">
+    <h1>📚 Guide des types de données en Programmation</h1>
+    <p class="subtitle">
+        Comprendre les différents types de variables et leurs possibilités
+    </p>
+</div>
+
+<div class="types-intro">
+    <h2>Qu'est-ce qu'un type de données ?</h2>
+    <p>
+        En programmation, chaque valeur appartient à un <strong>type</strong>. Le type détermine :
+    </p>
+    <ul>
+        <li>✅ Quelles opérations sont possibles avec cette valeur</li>
+        <li>✅ Comment la valeur est stockée en mémoire</li>
+        <li>✅ Comment elle se comporte dans différentes situations</li>
+    </ul>
+</div>
+
+{% for type_key, type_data in types.items %}
+<div class="type-card">
+    <div class="type-header">
+        <h2>{{ type_data.nom }}</h2>
+    </div>
+    
+    <div class="type-body">
+        <div class="type-description">
+            <h3>📝 Description</h3>
+            <p>{{ type_data.description }}</p>
+        </div>
+
+        <div class="type-examples">
+            <h3>💡 Exemples</h3>
+            <div class="examples-grid">
+                {% for exemple in type_data.exemples %}
+                    <code class="example-code">{{ exemple }}</code>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="type-operations">
+            <div class="operations-possible">
+                <h3>✅ Opérations possibles</h3>
+                <ul>
+                    {% for operation in type_data.operations_possibles %}
+                        <li>{{ operation }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="operations-impossible">
+                <h3>❌ Opérations impossibles</h3>
+                <ul>
+                    {% for operation in type_data.operations_impossibles %}
+                        <li>{{ operation }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<div class="types-summary">
+    <h2>📊 Tableau récapitulatif</h2>
+    <div class="table-responsive">
+        <table class="summary-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Addition</th>
+                    <th>Soustraction</th>
+                    <th>Multiplication</th>
+                    <th>Division</th>
+                    <th>Comparaison</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Entier</strong></td>
+                    <td class="check">✅ Avec nombres</td>
+                    <td class="check">✅ Avec nombres</td>
+                    <td class="check">✅ Avec nombres et chaînes</td>
+                    <td class="check">✅ Avec nombres</td>
+                    <td class="check">✅ Toutes</td>
+                </tr>
+                <tr>
+                    <td><strong>Flottant</strong></td>
+                    <td class="check">✅ Avec nombres</td>
+                    <td class="check">✅ Avec nombres</td>
+                    <td class="check">✅ Avec nombres</td>
+                    <td class="check">✅ Avec nombres</td>
+                    <td class="check">✅ Toutes</td>
+                </tr>
+                <tr>
+                    <td><strong>Chaîne</strong></td>
+                    <td class="check">✅ Avec chaînes</td>
+                    <td class="cross">❌</td>
+                    <td class="check">✅ Avec entiers</td>
+                    <td class="cross">❌</td>
+                    <td class="check">✅ Égalité et ordre</td>
+                </tr>
+                <tr>
+                    <td><strong>Booléen</strong></td>
+                    <td class="cross">❌</td>
+                    <td class="cross">❌</td>
+                    <td class="cross">❌</td>
+                    <td class="cross">❌</td>
+                    <td class="check">✅ Égalité seulement</td>
+                </tr>
+                <tr>
+                    <td><strong>None</strong></td>
+                    <td class="cross">❌</td>
+                    <td class="cross">❌</td>
+                    <td class="cross">❌</td>
+                    <td class="cross">❌</td>
+                    <td class="check">✅ Égalité seulement</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="tips-section">
+    <h2>💡 Astuces importantes</h2>
+    
+    <div class="tip-box">
+        <h3>🔄 Conversion de types</h3>
+        <p>
+            Python peut parfois convertir automatiquement les types. Par exemple, un entier
+            peut être traité comme un flottant dans une opération. Mais attention : Python
+            ne convertit PAS automatiquement les chaînes en nombres !
+        </p>
+    </div>
+
+    <div class="tip-box">
+        <h3>⚠️ Erreurs courantes</h3>
+        <p>
+            L'erreur la plus fréquente chez les débutants est d'essayer d'additionner un nombre
+            et une chaîne. Python refuse car il ne sait pas si vous voulez faire une addition
+            mathématique ou une concaténation de texte.
+        </p>
+    </div>
+
+    <div class="tip-box">
+        <h3>🎯 Bonne pratique</h3>
+        <p>
+            Avant d'effectuer une opération, assurez-vous que les types sont compatibles.
+            Utilisez les fonctions de conversion comme <code>int()</code>, <code>float()</code>,
+            ou <code>str()</code> si nécessaire.
+        </p>
+    </div>
+</div>
+
+<div class="cta-section">
+    <h2>Prêt à tester ?</h2>
+    <p>Maintenant que vous connaissez les types, testez les opérations !</p>
+    <a href="{% url 'operations:addition' %}" class="btn btn-large btn-primary">
+        🧪 Tester les opérations
+    </a>
+</div>
+{% endblock %}

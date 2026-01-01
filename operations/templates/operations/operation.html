@@ -1,0 +1,263 @@
+
+{% extends 'operations/base.html' %}
+
+{% load static %}
+
+{% block title %}{{ operation_name }} - Apprentissage{% endblock %}
+
+{% block content %}
+<div class="operation-page">
+    <div class="operation-header">
+        <h1>{{ operation_name }}</h1>
+        <p class="operation-description">
+            {% if operation == 'addition' %}
+                L'addition permet de combiner deux valeurs. Elle fonctionne avec les nombres et les chaînes de caractères (concaténation).
+            {% elif operation == 'soustraction' %}
+                La soustraction retire une valeur d'une autre. Elle ne fonctionne qu'avec des nombres.
+            {% elif operation == 'multiplication' %}
+                La multiplication peut multiplier deux nombres, ou répéter une chaîne plusieurs fois.
+            {% elif operation == 'division' %}
+                La division partage une valeur par une autre. Elle ne fonctionne qu'avec des nombres (attention à la division par zéro !).
+            {% elif operation == 'modulo' %}
+                Le modulo donne le reste d'une division entière. Utile pour vérifier si un nombre est pair ou impair.
+            {% elif operation == 'concatenation' %}
+                La concaténation assemble plusieurs valeurs en les convertissant en texte.
+            {% elif operation == 'comparaison' %}
+                La comparaison permet de vérifier la relation entre deux valeurs (égalité, supériorité, infériorité).
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Formulaire de saisie -->
+    <div class="form-container">
+        <h2>✏️ Entrez vos valeurs</h2>
+        <p class="form-help">
+            Vous pouvez entrer : des nombres (42, 3.14), du texte, True/False, ou None
+        </p>
+        
+        <form method="post" class="operation-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.value1.id_for_label }}">{{ form.value1.label }}</label>
+                {{ form.value1 }}
+                {% if form.value1.errors %}
+                    <div class="error-message">{{ form.value1.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.value2.id_for_label }}">{{ form.value2.label }}</label>
+                {{ form.value2 }}
+                {% if form.value2.errors %}
+                    <div class="error-message">{{ form.value2.errors }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-submit">
+                🚀 Calculer
+            </button>
+        </form>
+    </div>
+
+    <!-- Résultats -->
+    {% if result_data %}
+    <div class="results-section">
+        <h2>📊 Résultats</h2>
+        
+        <!-- Affichage des types détectés -->
+        <div class="types-detected">
+            <h3>Types détectés</h3>
+            <div class="type-boxes">
+                <div class="type-box">
+                    <div class="type-label">Valeur 1</div>
+                    <div class="type-value">"{{ result_data.raw_value1 }}"</div>
+                    <div class="type-name">Type : <strong>{{ result_data.type1 }}</strong></div>
+                </div>
+                
+                <div class="operation-symbol">
+                    {% if operation == 'addition' %}➕
+                    {% elif operation == 'soustraction' %}➖
+                    {% elif operation == 'multiplication' %}✖️
+                    {% elif operation == 'division' %}➗
+                    {% elif operation == 'modulo' %}📐
+                    {% elif operation == 'concatenation' %}🔗
+                    {% elif operation == 'comparaison' %}⚖️
+                    {% endif %}
+                </div>
+                
+                <div class="type-box">
+                    <div class="type-label">Valeur 2</div>
+                    <div class="type-value">"{{ result_data.raw_value2 }}"</div>
+                    <div class="type-name">Type : <strong>{{ result_data.type2 }}</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Résultat de l'opération -->
+        {% if result_data.operation_result.success %}
+        <div class="result-success">
+            <h3>✅ Opération réussie !</h3>
+            
+            {% if operation == 'comparaison' %}
+                <div class="comparison-results">
+                    {% for comp_name, comp_data in result_data.operation_result.result.items %}
+                        <div class="comparison-item {% if comp_data.0 %}true{% else %}false{% endif %}">
+                            <span class="comp-expression">{{ comp_data.1 }}</span>
+                            <span class="comp-result">= {{ comp_data.0 }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="result-value">
+                    <strong>Résultat :</strong> {{ result_data.operation_result.result }}
+                </div>
+            {% endif %}
+            
+            <div class="result-explanation">
+                <p>{{ result_data.operation_result.explanation }}</p>
+            </div>
+
+            <!-- Graphique pour les opérations numériques -->
+            {% if result_data.chart_data and operation != 'comparaison' %}
+            <div class="chart-container">
+                <h3>📈 Visualisation graphique</h3>
+                <canvas id="resultChart"></canvas>
+            </div>
+            
+            <script>
+                // Ce script crée un graphique avec Chart.js
+                const ctx = document.getElementById('resultChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: {{ result_data.chart_data.labels|safe }},
+                        datasets: [{
+                            label: 'Valeurs',
+                            data: {{ result_data.chart_data.values|safe }},
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(75, 192, 192, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(75, 192, 192, 1)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.1)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Comparaison des valeurs',
+                                font: {
+                                    size: 16
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="result-error">
+            <h3>❌ Opération impossible</h3>
+            <div class="error-details">
+                <p><strong>Erreur :</strong> {{ result_data.operation_result.error }}</p>
+                <p><strong>Explication :</strong> {{ result_data.operation_result.explanation }}</p>
+            </div>
+            <div class="error-help">
+                <h4>💡 Que faire ?</h4>
+                <ul>
+                    <li>Vérifiez que les types de vos valeurs sont compatibles avec cette opération</li>
+                    <li>Consultez le <a href="{% url 'operations:types_info' %}">guide des types</a> pour voir les opérations possibles</li>
+                    <li>Essayez une autre opération ou d'autres valeurs</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <!-- Exemples d'utilisation -->
+    <div class="examples-section">
+        <h2>💡 Exemples pour {{ operation_name }}</h2>
+        
+        <div class="examples-grid">
+            {% if operation == 'addition' %}
+                <div class="example-card success">
+                    <div class="example-title">✅ Exemple valide</div>
+                    <code>5 + 3 = 8</code>
+                    <p>Addition de deux entiers</p>
+                </div>
+                <div class="example-card success">
+                    <div class="example-title">✅ Exemple valide</div>
+                    <code>"Hello" + "World" = "HelloWorld"</code>
+                    <p>Concaténation de chaînes</p>
+                </div>
+                <div class="example-card error">
+                    <div class="example-title">❌ Exemple invalide</div>
+                    <code>5 + "texte"</code>
+                    <p>Impossible : types incompatibles</p>
+                </div>
+            
+            {% elif operation == 'multiplication' %}
+                <div class="example-card success">
+                    <div class="example-title">✅ Exemple valide</div>
+                    <code>4 * 5 = 20</code>
+                    <p>Multiplication de nombres</p>
+                </div>
+                <div class="example-card success">
+                    <div class="example-title">✅ Exemple valide</div>
+                    <code>"Ha" * 3 = "HaHaHa"</code>
+                    <p>Répétition de chaîne</p>
+                </div>
+                <div class="example-card error">
+                    <div class="example-title">❌ Exemple invalide</div>
+                    <code>"Hello" * "World"</code>
+                    <p>Impossible : deux chaînes</p>
+                </div>
+            
+            {% elif operation == 'comparaison' %}
+                <div class="example-card success">
+                    <div class="example-title">✅ Exemple valide</div>
+                    <code>5 > 3 = True</code>
+                    <p>Comparaison de nombres</p>
+                </div>
+                <div class="example-card success">
+                    <div class="example-title">✅ Exemple valide</div>
+                    <code>"abc" < "xyz" = True</code>
+                    <p>Ordre alphabétique</p>
+                </div>
+                <div class="example-card success">
+                    <div class="example-title">✅ Exemple valide</div>
+                    <code>10 == 10 = True</code>
+                    <p>Test d'égalité</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

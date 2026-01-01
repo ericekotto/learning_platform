@@ -1,0 +1,109 @@
+<!-- ==========================================
+     4. courses/templates/courses/leaderboard.html
+     ========================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Classement{% endblock %}
+
+{% block content %}
+<div class="card text-center">
+    <h1>🏆 Classement Général</h1>
+    <p>Les meilleurs étudiants de la plateforme</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2>🥇 Classement Global</h2>
+        <p>Tous les étudiants classés par score total</p>
+    </div>
+    
+    {% if students %}
+        {% for student in students %}
+       <div class="leaderboard-item fade-in" style="--delay: {{ forloop.counter0 }}; animation-delay: calc(var(--delay) * 100ms);">
+            <span class="rank {% if forloop.counter <= 3 %}rank-{{ forloop.counter }}{% endif %}">
+                #{{ forloop.counter }}
+            </span>
+            <div class="student-info">
+                <div class="student-name">
+                    {{ student.get_full_name }}
+                    {% if student == user %}
+                        <span class="badge badge-info">Vous</span>
+                    {% endif %}
+                </div>
+                <div class="student-score">
+                    {{ student.total_score|default:0 }} points • {{ student.exercises_done|default:0 }} exercices réalisés
+                </div>
+            </div>
+            {% if forloop.counter == 1 %}
+                <div style="font-size: 2rem;">🥇</div>
+            {% elif forloop.counter == 2 %}
+                <div style="font-size: 2rem;">🥈</div>
+            {% elif forloop.counter == 3 %}
+                <div style="font-size: 2rem;">🥉</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="card text-center" style="background: #f8f9fa;">
+            <p>Aucun étudiant n'a encore complété d'exercices.</p>
+        </div>
+    {% endif %}
+</div>
+
+<div class="card">
+    <h2>📚 Classements par Cours</h2>
+    <p>Les meilleurs étudiants pour chaque cours</p>
+</div>
+
+{% for course, top_students in course_leaderboards.items %}
+<div class="card">
+    <div class="card-header">
+        <h3>
+            {% if course.course_type == 'variables' %}📦
+            {% elif course.course_type == 'conditionals' %}🔀
+            {% elif course.course_type == 'loops' %}🔄
+            {% elif course.course_type == 'functions' %}⚙️
+            {% endif %}
+            {{ course.title }}
+        </h3>
+    </div>
+    
+    {% if top_students %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Rang</th>
+                    <th>Étudiant</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in top_students %}
+                <tr>
+                    <td>
+                        <span class="rank {% if forloop.counter <= 3 %}rank-{{ forloop.counter }}{% endif %}">
+                            #{{ forloop.counter }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ student.get_full_name }}
+                        {% if student == user %}
+                            <span class="badge badge-info">Vous</span>
+                        {% endif %}
+                    </td>
+                    <td><strong>{{ student.course_score|default:0 }} points</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="text-align: center; color: #666;">Aucun score pour ce cours.</p>
+    {% endif %}
+</div>
+{% endfor %}
+
+<div class="text-center mt-3">
+    <a href="{% url 'courses:home' %}" class="btn btn-primary">← Retour aux cours</a>
+    <a href="{% url 'courses:my_progress' %}" class="btn btn-secondary">Ma progression</a>
+</div>
+{% endblock %}

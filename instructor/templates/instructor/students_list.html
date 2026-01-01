@@ -1,0 +1,89 @@
+<!-- ==========================================
+     8. instructor/templates/instructor/students_list.html
+     ========================================== -->
+{% extends 'base.html' %}
+
+{% block title %}Liste des Étudiants{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>👨‍🎓 Liste des Étudiants</h1>
+        <p>Tous les étudiants inscrits sur la plateforme</p>
+    </div>
+</div>
+
+<div class="card">
+    <form method="get" style="margin-bottom: 1.5rem;">
+        <div class="form-group">
+            <label for="search">🔍 Rechercher un étudiant</label>
+            <input 
+                type="text" 
+                name="search" 
+                id="search" 
+                class="form-input" 
+                placeholder="Nom, prénom, email ou nom d'utilisateur..."
+                value="{{ search_query }}"
+            >
+        </div>
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+        {% if search_query %}
+            <a href="{% url 'instructor:students_list' %}" class="btn btn-secondary">Réinitialiser</a>
+        {% endif %}
+    </form>
+    
+    {% if students %}
+        <p><strong>{{ students.count }}</strong> étudiant(s) trouvé(s)</p>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Rang</th>
+                    <th>Nom complet</th>
+                    <th>Email</th>
+                    <th>Score total</th>
+                    <th>Exercices</th>
+                    <th>Inscrit le</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>
+                        <span class="rank {% if forloop.counter <= 3 %}rank-{{ forloop.counter }}{% endif %}">
+                            #{{ forloop.counter }}
+                        </span>
+                    </td>
+                    <td><strong>{{ student.get_full_name }}</strong></td>
+                    <td>{{ student.email }}</td>
+                    <td>
+                        <span class="badge badge-success">{{ student.total_score|default:0 }} pts</span>
+                    </td>
+                    <td>{{ student.exercises_count|default:0 }}</td>
+                    <td>{{ student.created_at|date:"d/m/Y" }}</td>
+                    <td>
+                        <a href="{% url 'instructor:student_detail' student.id %}" class="btn btn-primary">
+                            Voir détails
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="card text-center" style="background: #f8f9fa;">
+            {% if search_query %}
+                <p>Aucun étudiant trouvé pour "{{ search_query }}".</p>
+            {% else %}
+                <p>Aucun étudiant inscrit pour le moment.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<div class="text-center mt-3">
+    <a href="{% url 'instructor:dashboard' %}" class="btn btn-primary">← Retour au tableau de bord</a>
+    <a href="{% url 'instructor:global_leaderboard' %}" class="btn btn-secondary">Voir les classements</a>
+</div>
+{% endblock %}

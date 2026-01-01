@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1>{{ course.title }}</h1>
+        <p>{{ course.description }}</p>
+    </div>
+    
+    <div class="card-body">
+        <h2>📖 Contenu du cours</h2>
+        <div class="course-content">{{ course.content|linebreaks }}</div>
+
+        {% if course.course_type == 'variables' %}
+        <div class="card" style="border: 2px solid #007bff; margin-top: 2rem;">
+            <div class="card-header" style="background: #e7f1ff;">
+                <h2>🧮 Apprenez encore plus en profondeur les variables et voir en détails les différentes opérations possibles !</h2>
+                <p>Expérimentez avec les variables et les opérations en temps réel</p>
+            </div>
+            <div class="card-body">
+                <h3>✨ Fonctionnalités</h3>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li>✅ Détection automatique des types</li>
+                    <li>✅ Test de toutes les opérations</li>
+                    <li>✅ Visualisation graphique</li>
+                    <li>✅ Explications en temps réel</li>
+                </ul>
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <a href="{% url 'operations:home' %}" class="btn btn-primary" style="font-size: 1.2rem; padding: 10px 25px;">
+                        🚀 Cliquez ici pour aller plus loin
+                    </a>
+                    <p style="margin-top: 1rem; color: #666;">Testez vos connaissances de manière pratique !</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <h2>💡 Pourquoi c'est important ?</h2>
+        <div class="card" style="background: #fff3cd;">
+            <p>{{ course.importance }}</p>
+        </div>
+        
+        <h2>🎯 Quand utiliser ?</h2>
+        <div class="card" style="background: #d4edda;">
+            <p>{{ course.when_to_use }}</p>
+        </div>
+        
+        <h2>✅ Opérations possibles</h2>
+        <div class="course-content">{{ course.possible_operations|linebreaks }}</div>
+        
+        <h2>❌ Opérations impossibles</h2>
+        <div class="course-content">{{ course.impossible_operations|linebreaks }}</div>
+    </div>
+</div>
+
+<!-- SECTION VIDÉOS YOUTUBE - AMÉLIORÉE -->
+<div class="card">
+    <div class="card-header">
+        <h2>📹 Vidéos Recommandées sur YouTube</h2>
+        <p>Regardez ces vidéos pour approfondir vos connaissances</p>
+    </div>
+    
+    {% if youtube_videos %}
+        <div class="videos-grid">
+            {% for video in youtube_videos %}
+            <a href="{{ video.url }}" target="_blank" class="video-card" rel="noopener noreferrer">
+                <img src="{{ video.thumbnail }}" alt="{{ video.title }}" class="video-thumbnail" loading="lazy">
+                <div class="video-info">
+                    <div class="video-title">{{ video.title }}</div>
+                    <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">
+                        {{ video.description|truncatewords:15 }}
+                    </p>
+                    <div style="margin-top: 0.5rem;">
+                        <span class="badge badge-danger" style="background: #FF0000;">
+                            ▶️ YouTube
+                        </span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        
+        <div style="text-align: center; margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+            <p style="margin: 0; color: #666;">
+                💡 <strong>Astuce :</strong> Cliquez sur une vidéo pour l'ouvrir dans un nouvel onglet YouTube
+            </p>
+        </div>
+    {% else %}
+        <div class="card text-center" style="background: #fff3cd;">
+            <p>🔍 Pour voir les vidéos YouTube, configurez la clé API dans settings.py</p>
+            <p style="font-size: 0.9rem; color: #666;">
+                Ou recherchez directement sur YouTube : 
+                <a href="https://www.youtube.com/results?search_query={{ course.youtube_search_query|urlencode }}" 
+                   target="_blank" 
+                   class="btn btn-danger" 
+                   style="background: #FF0000; margin-top: 0.5rem;">
+                    📺 Rechercher sur YouTube
+                </a>
+            </p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- SECTION EXERCICES -->
+<div class="card">
+    <div class="card-header">
+        <h2>🎯 Exercices Pratiques</h2>
+        <p>Testez vos connaissances avec ces exercices</p>
+    </div>
+    
+    {% if exercises %}
+        <div class="grid-2">
+            {% for exercise in exercises %}
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <h3>{{ exercise.title }}</h3>
+                    <span class="difficulty-badge difficulty-{{ exercise.difficulty }}">
+                        {{ exercise.get_difficulty_display }}
+                    </span>
+                </div>
+                <p>💰 {{ exercise.points }} points</p>
+                
+                {% if user_scores %}
+                    {% for score in user_scores %}
+                        {% if score.exercise == exercise %}
+                            <div style="margin: 0.5rem 0;">
+                                {% if score.is_correct %}
+                                    <span class="badge badge-success">✅ Réussi - {{ score.score }}/{{ score.max_score }} points</span>
+                                {% else %}
+                                    <span class="badge badge-danger">❌ Raté - {{ score.score }}/{{ score.max_score }} points</span>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                
+                <a href="{% url 'courses:exercise' exercise.id %}" class="btn btn-primary">
+                    {% if user_scores and user_scores|length > 0 %}
+                        Refaire l'exercice
+                    {% else %}
+                        Faire l'exercice
+                    {% endif %}
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card text-center" style="background: #f8f9fa;">
+            <p>Aucun exercice disponible pour le moment.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- BOUTONS DE NAVIGATION -->
+<div class="text-center mt-3">
+    <a href="{% url 'courses:home' %}" class="btn btn-secondary">← Retour aux cours</a>
+    <a href="{% url 'courses:leaderboard' %}" class="btn btn-warning">🏆 Voir le classement</a>
+</div>
+{% endblock %}
