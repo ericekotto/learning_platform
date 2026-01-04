@@ -16,7 +16,7 @@ SECRET_KEY = 'django-insecure-votre-cle-secrete-a-changer'
 # Mode debug (mettre False en production)
 DEBUG = True
 
-ALLOWED_HOSTS = ['learning-platform.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['learning-platform-mfi2.onrender.com', 'learning-platform.onrender.com', '127.0.0.1', 'localhost']
 
 # Applications installées
 INSTALLED_APPS = [
